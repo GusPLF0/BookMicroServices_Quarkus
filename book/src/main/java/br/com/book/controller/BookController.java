@@ -3,6 +3,7 @@ package br.com.book.controller;
 import br.com.book.repository.BookRepository;
 import br.com.book.connection.CambioClient;
 import br.com.book.domain.Book;
+import br.com.book.response.Cambio;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -32,7 +33,9 @@ public class BookController {
             throw new RuntimeException("Book not found");
         }
 
-        Response cambio = cambioClient.getCambio(book.getPrice(), book.getCurrency(), currency);
+        Cambio cambio = cambioClient.getCambio(book.getPrice(), "USD", currency);
+
+        book.setPrice(cambio.getConvertedValue());
         return book;
     }
 }
